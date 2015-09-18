@@ -6,10 +6,72 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.js"></script>
 		<style>
-			.gm-button {
+			.gm-song {
 				margin: 2px;
 			}
+			
+			#gm-video {
+				display: none;
+			}
 		</style>
+		<script>
+			var songs = {
+				'To Hell With Georgia': 'ToHellWithGeorgia.mp4',
+				"Ramblin' Wreck": 'RamblinWreck.mp4'
+			};
+			
+			$(function () {
+				var video = $('#gm-video');
+				var play = $('#gm-play');
+				var pause = $('#gm-pause');
+				var stop = $('#gm-stop');
+				var restart = $('#gm-restart');
+				var progress = $('#gm-progress');
+				var name = $('#gm-name');
+				play.click(function () {
+					video[0].play();
+					play.hide();
+					pause.show();
+				});
+				pause.click(function () {
+					video[0].pause();
+					pause.hide();
+					play.show();
+				});
+				stop.click(function () {
+					pause.click();
+					video[0].currentTime = 0;
+				});
+				restart.click(function () {
+					stop.click();
+					play.click();
+				});
+				
+				video.on('timeupdate', function () {
+					progress.css('width', (video[0].currentTime / video[0].duration * 100) + '%');
+				});
+				
+				var row = $('#gm-songs');
+				
+				for (var title in songs) {
+					var song = $('<a>').addClass('gm-song blue darken-4 col s12 waves-effect waves-light btn-large');
+					song.text(title);
+					song.prepend($('<i>').addClass('material-icons left').text('play_arrow'));
+					song.data('title', title);
+					song.data('file', songs[title]);
+					row.append(song);
+				}
+				$('.gm-song').click(function () {
+					var song = $(this);
+					var title = song.data('title');
+					var file = song.data('file');
+					stop.click();
+					video.attr('src', 'media/' + file);
+					name.text(title);
+					play.click();
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -17,42 +79,35 @@
 				<h1 class="center-align">Georgia Tech Songs</h1>
 			</div>
 			<div class="row">
+				<video id="gm-video" src="media/ToHellWithGeorgia.mp4"></video>
 				<div class="col s12">
-					<h5 class="left truncate">Song: <span>To Hell With Georgia</span></h5>
+					<h5 class="left truncate">Song: <span id="gm-name">To Hell With Georgia</span></h5>
 					<div class="right">
-						<a class="waves-effect waves-light btn">
+						<a id="gm-play" class="blue waves-effect waves-light btn">
 							<i class="material-icons left">play_arrow</i>
 							<span class="hide-on-small-only">Play</span>
 						</a>
-						<a class="waves-effect waves-light btn" style="display: none">
+						<a id="gm-pause" class="blue waves-effect waves-light btn" style="display: none">
 							<i class="material-icons left">pause</i>
 							<span class="hide-on-small-only">Pause</span>
 						</a>
-						<a class="waves-effect waves-light btn">
+						<a id="gm-stop" class="blue waves-effect waves-light btn">
 							<i class="material-icons left">stop</i>
 							<span class="hide-on-small-only">Stop</span>
 						</a>
-						<a class="waves-effect waves-light btn">
+						<a id="gm-restart" class="blue waves-effect waves-light btn">
 							<i class="material-icons left">replay</i>
-							<span class="hide-on-small-only">Replay</span>
+							<span class="hide-on-small-only">Restart</span>
 						</a>
 					</div>
 				</div>
 				<div class="col s12">
 					<div class="blue lighten-5 progress">
-						<div class="blue determinate"></div>
+						<div id="gm-progress" class="blue determinate"></div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<a class="gm-button blue darken-4 col s12 waves-effect waves-light btn-large">
-					<i class="material-icons left">play_arrow</i>
-					To Hell With Georgia
-				</a>
-				<a class="gm-button blue darken-4 col s12 waves-effect waves-light btn-large">
-					<i class="material-icons left">play_arrow</i>
-					Ramblin' Wreck
-				</a>
+			<div id="gm-songs" class="row">
 			</div>
 		</div>
 	</body>
