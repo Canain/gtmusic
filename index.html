@@ -13,6 +13,19 @@
 			#gm-video {
 				display: none;
 			}
+			
+			.gm-spin {
+				animation: spin 2s linear infinite;
+			}
+			
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
 		</style>
 		<script>
 			var songs = {
@@ -70,6 +83,13 @@
 					name.text(title);
 					play.click();
 				});
+				
+				var loop = $('#gm-loop');
+				var spin = loop.find('i');
+				loop.click(function () {
+					spin.toggleClass('gm-spin');
+					video[0].loop = !video[0].loop;
+				});
 			});
 		</script>
 	</head>
@@ -83,21 +103,25 @@
 				<div class="col s12">
 					<h5 class="left truncate">Song: <span id="gm-name">To Hell With Georgia</span></h5>
 					<div class="right">
-						<a id="gm-play" class="blue waves-effect waves-light btn">
+						<a id="gm-play" class="blue waves-effect waves-light btn-floating">
 							<i class="material-icons left">play_arrow</i>
 							<span class="hide-on-small-only">Play</span>
 						</a>
-						<a id="gm-pause" class="blue waves-effect waves-light btn" style="display: none">
+						<a id="gm-pause" class="blue waves-effect waves-light btn-floating" style="display: none">
 							<i class="material-icons left">pause</i>
 							<span class="hide-on-small-only">Pause</span>
 						</a>
-						<a id="gm-stop" class="blue waves-effect waves-light btn">
+						<a id="gm-stop" class="blue waves-effect waves-light btn-floating">
 							<i class="material-icons left">stop</i>
 							<span class="hide-on-small-only">Stop</span>
 						</a>
-						<a id="gm-restart" class="blue waves-effect waves-light btn">
+						<a id="gm-restart" class="blue waves-effect waves-light btn-floating">
 							<i class="material-icons left">replay</i>
 							<span class="hide-on-small-only">Restart</span>
+						</a>
+						<a id="gm-loop" class="blue waves-effect waves-light btn-floating">
+							<i class="material-icons left">loop</i>
+							<span class="hide-on-small-only">Loop</span>
 						</a>
 					</div>
 				</div>
